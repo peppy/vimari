@@ -291,7 +291,7 @@ function updateLinkHints() {
         matchedLink.focus();
         deactivateLinkHintsMode();
       } else {
-        setTimeout(function() { simulateClick(matchedLink, false); }, 400);
+        setTimeout(function() { simulateClick(matchedLink, false); }, 50);
         matchedLink.focus();
         deactivateLinkHintsMode();
       }

@@ -2,6 +2,7 @@ import Cocoa
 import SafariServices.SFSafariApplication
 import OSLog
 
+@available(macOS 10.12.4, *)
 class ViewController: NSViewController {
     @IBOutlet var extensionStatus: NSTextField!
     @IBOutlet var spinner: NSProgressIndicator!
