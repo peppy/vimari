@@ -74,10 +74,10 @@ var actionMap = {
 		function() { window.open(window.location.href); },
 
 	'scrollDownHalfPage':
-		function() { customScrollBy(0, window.innerHeight / 2); },
+		function() { customScrollBy(0, window.innerHeight * 0.8); },
 
 	'scrollUpHalfPage':
-		function() { customScrollBy(0, window.innerHeight / -2); },
+		function() { customScrollBy(0, window.innerHeight * -0.8); },
 
 	'goToPageBottom':
 		function() { customScrollBy(0, document.body.scrollHeight); },
