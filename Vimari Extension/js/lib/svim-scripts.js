@@ -11,12 +11,17 @@ function customScrollBy(x, y) {
     if (scrollTarget == -1)
         scrollTarget = window.pageYOffset + y;
     else
+    {
+        if (scrollTarget > document.documentElement.scrollHeight - window.innerHeight || scrollTarget < 0)
+            return;
+
         scrollTarget += y;
+    }
 
     window.scroll({ left: x, top: scrollTarget, behavior: 'smooth' });
 
     clearTimeout(scrollTargetResetTimeout);
     scrollTargetResetTimeout = setTimeout(() => {
       scrollTarget = -1;
-    }, 100)
+    }, 200)
 }
