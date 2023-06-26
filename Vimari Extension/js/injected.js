@@ -260,7 +260,7 @@ function stopSitePropagation() {
         }
 
         if (settings.transparentBindings === true) {
-            if (boundKeys().has(e.key) && !isActiveElementEditable()) {
+            if (boundKeys().has(e.key) && !isActiveElementEditable() && !e.metaKey && e.key != 'Escape') {
                 // If we are in normal mode with transparentBindings enabled we
                 // should only stop propagation in an editable element or if the
                 // key is bound to a Vimari action.
