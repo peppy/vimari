@@ -259,16 +259,25 @@ function stopSitePropagation() {
             return
         }
 
-        if (settings.transparentBindings === true) {
-            if (boundKeys().has(e.key) && !isActiveElementEditable() && !e.metaKey && e.key != 'Escape') {
-                // If we are in normal mode with transparentBindings enabled we
-                // should only stop propagation in an editable element or if the
-                // key is bound to a Vimari action.
-                e.stopPropagation()
-            }
-        } else if (!isActiveElementEditable()) {
+        if (e.key == 'Escape')
+        {
+            // fuck knows how to fix this
             e.stopPropagation()
+            return;
         }
+
+        if (isActiveElementEditable())
+            return;
+
+        if (settings.transparentBindings === true) {
+            // Special cases where we don't need to be handling the key.
+            if (!boundKeys().has(e.key) || e.metaKey || e.key == 'Escape')
+                return;
+        }
+
+        // At this point, the underlying website will not receive the key,
+        // as we are pretty sure we're handling it.
+        e.stopPropagation()
     }
 }
 
