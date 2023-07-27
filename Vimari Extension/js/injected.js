@@ -212,16 +212,22 @@ function executeAction(actionName) {
 		if (linkHintsModeActivated || !extensionActive || insertMode)
 			return;
 
-		//Call the action function
-		actionMap[actionName]();
+        if (isExcludedUrl(settings.excludedUrls, document.URL))
+        {
+            enterNormalMode();
+            return;
+        }
 
-		// Tell mousetrap to stop propagation
-		return false;
-	}
+        //Call the action function
+        actionMap[actionName]();
+
+        // Tell mousetrap to stop propagation
+        return false;
+    }
 }
 
 function unbindKeyCodes() {
-	Mousetrap.reset();
+    Mousetrap.reset();
     document.removeEventListener("keydown", stopSitePropagation);
 }
 
@@ -254,10 +260,20 @@ function boundKeys() {
 // prevent custom key behaviour implemented by the underlying website.
 function stopSitePropagation() {
     return function (e) {
-        if (insertMode) {
+        if (isExcludedUrl(settings.excludedUrls, document.URL))
+        {
+            if (insertMode)
+            {
+                console.log("exiting insert mode (excluded url)");
+                enterNormalMode();
+            }
+
+            return;
+        }
+
+        if (insertMode)
             // Never stop propagation in insert mode.
             return
-        }
 
         if (settings.transparentBindings === true) {
             if (boundKeys().has(e.key) && !isActiveElementEditable() && !e.metaKey && e.key != 'Escape') {
@@ -353,20 +369,15 @@ function setSettings(msg) {
 }
 
 function activateExtension(settings) {
-    if ((typeof settings != "undefined") &&
-        isExcludedUrl(settings.excludedUrls, document.URL)) {
-        return;
-    }
-
     // Stop keydown propagation
     document.addEventListener("keydown", stopSitePropagation(), true);
     bindKeyCodesToActions(settings);
 }
 
 function isExcludedUrl(storedExcludedUrls, currentUrl) {
-	if (!storedExcludedUrls.length) {
-		return false;
-	}
+    if (!storedExcludedUrls.length) {
+        return false;
+    }
 
     var excludedUrls, regexp, url, formattedUrl, _i, _len;
     excludedUrls = storedExcludedUrls.split(",");
@@ -376,6 +387,7 @@ function isExcludedUrl(storedExcludedUrls, currentUrl) {
         formattedUrl = formattedUrl.toLowerCase().trim();
         regexp = new RegExp('((.*)?(' + formattedUrl + ')+(.*))');
         if (currentUrl.toLowerCase().match(regexp)) {
+            console.log("exclusion found");
             return true;
         }
     }
