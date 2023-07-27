@@ -135,6 +135,7 @@ function goToFirstInput() {
 
   var inputToFocus = bestInViewInput || bestInput;
   if (inputToFocus !== null) {
+    enterInsertMode();
     inputToFocus.focus();
   }
 }
