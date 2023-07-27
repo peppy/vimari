@@ -165,8 +165,6 @@ function bindKeyCodesToActions(settings) {
 	// Only add if topWindow... not iframe
     Mousetrap.reset();
 	if (topWindow) {
-		Mousetrap.bind('esc', enterNormalMode);
-		Mousetrap.bind('ctrl+[', enterNormalMode);
 		Mousetrap.bind('i', enterInsertMode);
 		for (var actionName in actionMap) {
 			if (actionMap.hasOwnProperty(actionName)) {
@@ -183,7 +181,6 @@ function enterNormalMode() {
 
 	// Clear link hints (if any)
 	deactivateLinkHintsMode();
-
 
     if (insertMode === false) {
         return // We are already in normal mode.
@@ -273,8 +270,17 @@ function stopSitePropagation() {
         }
 
         if (insertMode)
+        {
+            if  (e.key == "Escape")
+            {
+                console.log("exiting insert mode");
+                enterNormalMode();
+                e.stopPropagation()
+            }
+
             // Never stop propagation in insert mode.
-            return
+            return;
+        }
 
         if (settings.transparentBindings === true) {
             if (boundKeys().has(e.key) && !isActiveElementEditable() && !e.metaKey && e.key != 'Escape') {
