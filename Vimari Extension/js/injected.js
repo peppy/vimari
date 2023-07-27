@@ -303,7 +303,7 @@ function isActiveElementEditable() {
     const el = document.activeElement;
     return (el != null && isEditable(el))
 }
- 
+
 
 // Adds an optional modifier to the configured key code for the action
 function getKeyCode(actionName) {
@@ -389,15 +389,11 @@ function isExcludedUrl(storedExcludedUrls, currentUrl) {
         return false;
     }
 
-    var excludedUrls, regexp, url, formattedUrl, _i, _len;
+    var excludedUrls, url, _i, _len;
     excludedUrls = storedExcludedUrls.split(",");
     for (_i = 0, _len = excludedUrls.length; _i < _len; _i++) {
-        url = excludedUrls[_i];
-        formattedUrl = stripProtocolAndWww(url);
-        formattedUrl = formattedUrl.toLowerCase().trim();
-        regexp = new RegExp('((.*)?(' + formattedUrl + ')+(.*))');
-        if (currentUrl.toLowerCase().match(regexp)) {
-            console.log("exclusion found");
+        url = excludedUrls[_i].trim();
+        if (currentUrl.includes(url)) {
             return true;
         }
     }
@@ -430,7 +426,7 @@ function inIframe () {
 if(!inIframe()){
     extensionCommunicator.requestSettingsUpdate()
 }
-                                 
+
 // Export to make it testable
 window.isExcludedUrl = isExcludedUrl;
 window.stripProtocolAndWww = stripProtocolAndWww;
