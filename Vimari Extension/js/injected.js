@@ -236,18 +236,19 @@ function boundKeys() {
         // Split multi-key bindings.
         .flatMap(s => {
             if (typeof s === "string" || s instanceof String) {
+                if (s.startsWith('ctrl'))
+                    return;
+
                 return splitBinding(s)
             } else if (Array.isArray(s)) {
-                return s.flatMap(splitBinding)
+                return s.filter(key => !key.startsWith('ctrl'))
+                        .flatMap(splitBinding)
             }
         })
 
     // Manually add the modifier, i, esc, and ctr+[.
     bindings.push(settings.modifier)
     bindings.push("i")
-    bindings.push("Escape")
-    bindings.push("Control")
-    bindings.push("[")
 
     // Use a set to remove duplicates.
     return new Set(bindings)
