@@ -210,7 +210,7 @@ function executeAction(actionName) {
 		if (linkHintsModeActivated || !extensionActive || insertMode)
 			return;
 
-        if (isExcludedUrl(settings.excludedUrls, document.URL))
+        if (isExcludedUrl(settings.excludedUrls, document.URL) && (actionName == "scrollDown" || actionName == "scrollUp" || actionName == "closeTab"))
         {
             enterNormalMode();
             return;
@@ -284,7 +284,12 @@ function stopSitePropagation() {
         }
 
         if (isActiveElementEditable())
+        {
+            // github labels boxxxxxx
+            if (isActiveElementTextArea())
+                enterInsertMode();
             return;
+        }
 
         if (settings.transparentBindings === true) {
             // Special cases where we don't need to be handling the key.
@@ -304,6 +309,10 @@ function isActiveElementEditable() {
     return (el != null && isEditable(el))
 }
 
+function isActiveElementTextArea() {
+    const el = document.activeElement;
+    return (el != null && isTextArea(el))
+}
 
 // Adds an optional modifier to the configured key code for the action
 function getKeyCode(actionName) {
@@ -352,6 +361,12 @@ function isEditable(target) {
 	return focusableInputs.indexOf(target.tagName.toLowerCase()) >= 0;
 }
 
+function isTextArea(target) {
+	if (target.getAttribute("contentEditable") === "true")
+		return true;
+	var focusableInputs = ["textarea"];
+	return focusableInputs.indexOf(target.tagName.toLowerCase()) >= 0;
+}
 
 /*
  * Embedded elements like Flash and quicktime players can obtain focus but cannot be programmatically
